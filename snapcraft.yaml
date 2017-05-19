@@ -85,28 +85,9 @@ parts:
         - bin/dnsmasq
     stage: [$bin]
     prime: [$bin]
-  openvswitch:
-    source: http://openvswitch.org/releases/openvswitch-2.6.1.tar.gz
-    plugin: autotools
-    build-packages:
-      - libnuma-dev
-      - libssl-dev
-      - python-all
-      - python-setuptools
-      - python-six
-    stage-packages:
-      - uuid-runtime
-    filesets:
-      bin:
-        - bin/ovs-*ctl
-        - bin/ovsdb-tool
-        - bin/ovsdb-client
-    stage: [$bin]
-    snap: [$bin]
   nova:
     after:
       - python
-      - openvswitch
     plugin: python
     python-version: python2
     source: http://tarballs.openstack.org/nova/nova-stable-ocata.tar.gz
@@ -135,6 +116,8 @@ parts:
     install:
       touch $SNAPCRAFT_PART_INSTALL/lib/python2.7/site-packages/paste/__init__.py
       touch $SNAPCRAFT_PART_INSTALL/lib/python2.7/site-packages/repoze/__init__.py
+      sed -i 's|sudo nova-rootwrap %s|sudo $SNAP/bin/nova-rootwrap %s|g' \
+          $SNAPCRAFT_PART_INSTALL/lib/python2.7/site-packages/nova/utils.py
   templates:
     after: [nova]
     plugin: dump
