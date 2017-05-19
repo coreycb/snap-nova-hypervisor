@@ -1,0 +1,3 @@
+#!/bin/sh
+#exec "env" PYTHONPATH=$PYTHONPATH:$SNAP/lib/python2.7/site-packages $SNAP/usr/bin/python2 $SNAP/bin/neutron-rootwrap-real "$@"
+exec "env" PYTHONPATH=$PYTHONPATH:/snap/nova-hypervisor/current/lib/python2.7/site-packages /snap/nova-hypervisor/current/usr/bin/python2 /snap/nova-hypervisor/current/bin/neutron-rootwrap-real "$@"

@@ -85,29 +85,10 @@ parts:
         - bin/dnsmasq
     stage: [$bin]
     prime: [$bin]
-  openvswitch:
-    source: http://openvswitch.org/releases/openvswitch-2.6.1.tar.gz
-    plugin: autotools
-    build-packages:
-      - libnuma-dev
-      - libssl-dev
-      - python-all
-      - python-setuptools
-      - python-six
-    stage-packages:
-      - uuid-runtime
-    filesets:
-      bin:
-        - bin/ovs-*ctl
-        - bin/ovsdb-tool
-        - bin/ovsdb-client
-    stage: [$bin]
-    snap: [$bin]
   nova:
     after:
       - patches
       - python
-      - openvswitch
     plugin: python
     python-version: python2
     source: http://tarballs.openstack.org/nova/nova-stable-ocata.tar.gz
@@ -142,6 +123,10 @@ parts:
       patch -p4 < $PATCH_DIR/oslo-config-dirs.patch
       patch -p4 < $PATCH_DIR/privsep-helper-path.patch
       cd -
+      sed -i 's|sudo nova-rootwrap %s|sudo /snap/nova-hypervisor/current/bin/nova-rootwrap %s|g' \
+          $SNAPCRAFT_PART_INSTALL/lib/python2.7/site-packages/nova/utils.py
+      mv $SNAPCRAFT_PART_INSTALL/bin/neutron-rootwrap $SNAPCRAFT_PART_INSTALL/bin/neutron-rootwrap-real
+      mv $SNAPCRAFT_PART_INSTALL/bin/nova-rootwrap $SNAPCRAFT_PART_INSTALL/bin/nova-rootwrap-real
   templates:
     after: [nova]
     plugin: dump
