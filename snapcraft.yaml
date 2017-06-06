@@ -113,11 +113,13 @@ parts:
       - -usr/bin/pydoc
       - -usr/bin/python2.7
       - -usr/lib/python2.7
-    install:
+    install: |
       touch $SNAPCRAFT_PART_INSTALL/lib/python2.7/site-packages/paste/__init__.py
       touch $SNAPCRAFT_PART_INSTALL/lib/python2.7/site-packages/repoze/__init__.py
-      sed -i 's|sudo nova-rootwrap %s|sudo $SNAP/bin/nova-rootwrap %s|g' \
+      sed -i 's|sudo nova-rootwrap %s|sudo /snap/nova-hypervisor/current/bin/nova-rootwrap %s|g' \
           $SNAPCRAFT_PART_INSTALL/lib/python2.7/site-packages/nova/utils.py
+      mv $SNAPCRAFT_PART_INSTALL/bin/neutron-rootwrap $SNAPCRAFT_PART_INSTALL/bin/neutron-rootwrap-real
+      mv $SNAPCRAFT_PART_INSTALL/bin/nova-rootwrap $SNAPCRAFT_PART_INSTALL/bin/nova-rootwrap-real
   templates:
     after: [nova]
     plugin: dump
