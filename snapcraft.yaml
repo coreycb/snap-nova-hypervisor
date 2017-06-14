@@ -140,6 +140,7 @@ parts:
       export PATCH_DIR="../../patches/src"
       patch -p4 < $PATCH_DIR/neutron-ns-metadata-proxy-path.patch
       patch -p4 < $PATCH_DIR/oslo-config-dirs.patch
+      patch -p4 < $PATCH_DIR/privsep-helper-path.patch
       cd -
   templates:
     after: [nova]

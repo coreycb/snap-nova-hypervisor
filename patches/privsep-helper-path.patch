@@ -1,0 +1,13 @@
+--- a/parts/nova/install/lib/python2.7/site-packages/oslo_privsep/priv_context.py
++++ b/parts/nova/install/lib/python2.7/site-packages/oslo_privsep/priv_context.py
+@@ -148,7 +148,9 @@
+         if self.conf.helper_command:
+             cmd = shlex.split(self.conf.helper_command)
+         else:
+-            cmd = _HELPER_COMMAND_PREFIX + ['privsep-helper']
++            cmd = _HELPER_COMMAND_PREFIX + ['env', 'PYTHONPATH=$PYTHONPATH:'
++                '/snap/nova-hypervisor/current/lib/python2.7/site-packages',
++                '/snap/nova-hypervisor/current/bin/privsep-helper']
+ 
+             try:
+                 for cfg_file in cfg.CONF.config_file:
