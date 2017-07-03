@@ -24,7 +24,6 @@ apps:
     daemon: simple
     plugs:
       - account-control
-      - kernel-module-control
       - network
       - network-bind
       - network-control
@@ -71,7 +70,6 @@ apps:
     daemon: simple
     plugs:
       - account-control
-      - kernel-module-control
       - network
       - network-bind
       - network-control
